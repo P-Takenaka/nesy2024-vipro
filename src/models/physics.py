@@ -75,16 +75,21 @@ class PhysicsEngine(pl.LightningModule):
 
             if 'obj_mass' in self.learned_parameters:
                 obj_mass = elup1(self.learned_parameters['obj_mass'])
+
+                mass = obj_mass.repeat(pos[...,:1].shape)
             else:
                 obj_mass = self.config['obj_mass']
+
+                mass = torch.full_like(pos[...,:1], fill_value=obj_mass, device=self.device)
         else:
             G = self.config['G']
             obj_mass = self.config['obj_mass']
 
+            mass = torch.full_like(pos[...,:1], fill_value=obj_mass, device=self.device)
+
         simulation_dt = self.config['simulation_dt']
         simulation_steps = self.config['simulation_steps']
 
-        mass = torch.full_like(pos[...,:1], fill_value=obj_mass, device=self.device)
         if self.prepend_background:
             mass[:,0] = 0.0
 

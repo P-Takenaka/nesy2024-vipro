@@ -491,7 +491,7 @@ class ProcVIP(BaseVIP):
     def log_training(self, outputs):
         super().log_training(outputs)
 
-        if self.predictor.Fs[0].learned_parameters:
+        if hasattr(self.predictor.Fs[0], 'learned_parameters') and self.predictor.Fs[0].learned_parameters:
             for k, v in self.predictor.Fs[0].learned_parameters.items():
                 self.log(f'learned_params/{k}', elup1(v), on_step=False, on_epoch=True, sync_dist=True, add_dataloader_idx=False)
 

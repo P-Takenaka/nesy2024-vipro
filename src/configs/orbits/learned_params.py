@@ -64,7 +64,6 @@ def get_config():
           "F_module": ml_collections.ConfigDict({
                   "module": "src.models.PhysicsEngine",
                   "learned_parameters": ['G', 'obj_mass'],
-                  "sanity_eps": None,
                   "G": sample_metadata['flags']['gravitational_constant'],
                   "step_rate": sample_metadata['flags']['step_rate'],
                   "frame_rate": sample_metadata['flags']['frame_rate'],
