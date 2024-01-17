@@ -5,7 +5,7 @@ from torch import nn
 from src.lib import deconv_norm_act, SoftPositionEmbed
 
 class SpatialBroadcastDecoder(pl.LightningModule):
-    def __init__(self, input_size, resolution, channels, ks, norm, strides):
+    def __init__(self, input_size, resolution, channels, ks, norm, strides, out_channels):
         super().__init__()
 
         self.input_size = input_size
@@ -14,9 +14,12 @@ class SpatialBroadcastDecoder(pl.LightningModule):
         self.ks = ks
         self.norm = norm
         self.strides = strides
+        self.out_channels = out_channels
 
+        # Build Decoder
+        # Spatial broadcast --> PosEnc --> DeConv CNN
         modules = []
-        for i in range(len(self.channels) - 2):
+        for i in range(len(self.channels) - 1):
             modules.append(
                 deconv_norm_act(
                     self.channels[i],
@@ -27,7 +30,7 @@ class SpatialBroadcastDecoder(pl.LightningModule):
                     act='relu'))
 
         modules.append(nn.Conv2d(
-                self.channels[-2], self.channels[-1], kernel_size=1, stride=1, padding=0))
+                self.channels[-1], self.out_channels, kernel_size=1, stride=1, padding=0))
 
         self.decoder = nn.Sequential(*modules)
         self.decoder_pos_embedding = SoftPositionEmbed(self.input_size,

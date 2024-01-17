@@ -105,6 +105,7 @@ def get_config():
           "input_size": slot_size,
           "resolution": (8, 8),
           "channels": (slot_size, 64, 64, 64, 64),
+          "out_channels": 4,
           "ks": 5,
           "norm": '',
           "strides": (2, 2, 2, 1),
